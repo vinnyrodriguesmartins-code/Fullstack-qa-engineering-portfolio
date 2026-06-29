@@ -21,3 +21,6 @@ node_modules/
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# Ignore duplicate local repo copy
+ExameDesenvolvedorDeTestes/
