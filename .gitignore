@@ -1,0 +1,23 @@
+# Build and dependency artifacts
+bin/
+obj/
+out/
+dist/
+coverage/
+node_modules/
+.vite/
+.next/
+
+# Environment and runtime files
+.env
+.env.*
+*.db
+*.sqlite
+*.sqlite3
+*.log
+*.user
+*.suo
+
+# OS generated files
+.DS_Store
+Thumbs.db
