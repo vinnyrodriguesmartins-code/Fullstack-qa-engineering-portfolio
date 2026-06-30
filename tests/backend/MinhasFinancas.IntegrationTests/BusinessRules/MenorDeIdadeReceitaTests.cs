@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using Microsoft.Extensions.DependencyInjection;
 using MinhasFinancas.Application.DTOs;
 using MinhasFinancas.Domain.Entities;
 using MinhasFinancas.IntegrationTests.Infrastructure;

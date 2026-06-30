@@ -14,9 +14,20 @@ test.describe("Regras de negócio via UI", () => {
     await page.getByLabel(/descrição/i).fill("Mesada");
     await page.getByLabel(/valor/i).fill("100");
 
-    // Selecionar pessoa menor (depende de seed/dados — ajuste conforme ambiente)
-    const tipoSelect = page.getByLabel(/tipo/i);
-    await expect(tipoSelect).toBeVisible();
+    // Seleciona pessoa menor (Pedro Oliveira, de 2010, menor de idade)
+    const pessoaInput = page.locator("#pessoa-select");
+    await pessoaInput.click();
+    await pessoaInput.fill("Pedro Oliveira");
+    
+    // Clica na opção contendo o nome do menor na listbox
+    await page.locator('role=option[name="Pedro Oliveira"]').click();
+
+    // Verifica se a mensagem de aviso para menores de idade é exibida
+    await expect(page.locator("text=Menores só podem registrar despesas.")).toBeVisible();
+
+    // Verifica se a opção "Receita" do select de Tipo está desabilitada
+    const receitaOption = page.locator('#tipo option[value="receita"]');
+    await expect(receitaOption).toBeDisabled();
   });
 
   test("API deve estar acessível", async ({ request }) => {

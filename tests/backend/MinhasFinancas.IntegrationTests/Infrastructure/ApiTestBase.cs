@@ -21,7 +21,12 @@ public class ApiTestBase : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
         });
     }
 
-    public Task InitializeAsync() => Task.CompletedTask;
+    public async Task InitializeAsync()
+    {
+        using var scope = Factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<MinhasFinancas.Infrastructure.Data.MinhasFinancasDbContext>();
+        await db.Database.EnsureCreatedAsync();
+    }
 
     public async Task DisposeAsync()
     {
