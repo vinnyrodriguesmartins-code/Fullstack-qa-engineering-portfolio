@@ -12,10 +12,10 @@ Repositório **somente de testes** para o sistema de controle de gastos residenc
 
 ### Código-fonte da aplicação
 
-A aplicação e a suíte de testes estão unificadas nesta mesma pasta do projeto (`minhas-financas`), com a seguinte estrutura:
+A aplicação e a suíte de testes estão unificadas nesta mesma pasta do projeto (`finances-app-clean-arch`), com a seguinte estrutura:
 
 ```text
-minhas-financas/
+finances-app-clean-arch/
 ├── api/             ← Backend .NET 9 Web API
 ├── web/             ← Frontend React + TypeScript
 ├── data/            ← SQLite Database (local)

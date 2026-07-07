@@ -25,7 +25,7 @@ jobs:
 
       # Restaura pacotes NuGet e executa a suíte de testes xUnit do backend
       - name: Restore and test backend
-        working-directory: minhas-financas/tests/backend
+        working-directory: finances-app-clean-arch/tests/backend
         run: |
           dotnet restore MinhasFinancas.Tests.sln
           dotnet test MinhasFinancas.Tests.sln --no-restore --verbosity normal
@@ -44,11 +44,11 @@ jobs:
         with:
           node-version: "20"
           cache: npm
-          cache-dependency-path: minhas-financas/tests/frontend/package.json
+          cache-dependency-path: finances-app-clean-arch/tests/frontend/package.json
 
       # Instala dependências do frontend de testes e executa o Vitest
       - name: Install and run Vitest
-        working-directory: minhas-financas/tests/frontend
+        working-directory: finances-app-clean-arch/tests/frontend
         run: |
           npm ci || npm install
           npm run test:unit
@@ -72,14 +72,14 @@ jobs:
 
       # Instala dependências e os navegadores virtuais necessários para o Playwright
       - name: Install Playwright
-        working-directory: minhas-financas/tests/frontend
+        working-directory: finances-app-clean-arch/tests/frontend
         run: |
           npm ci || npm install
           npx playwright install --with-deps chromium
 
       # Executa os testes automatizados simulando ações reais do usuário no navegador
       - name: Run E2E
-        working-directory: minhas-financas/tests/frontend
+        working-directory: finances-app-clean-arch/tests/frontend
         env:
           WEB_BASE_URL: ${{ vars.WEB_BASE_URL }}
           API_BASE_URL: ${{ vars.API_BASE_URL }}
