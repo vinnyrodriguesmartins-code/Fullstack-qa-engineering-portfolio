@@ -24,6 +24,66 @@ Seja bem-vindo(a) ao meu portfólio de engenharia de software! Este repositório
 | :--- | :--- | :--- | :--- | :---: |
 | **Minhas Finanças** | Sistema completo para controle de despesas e receitas domésticas. | .NET 9, React, Vite, Tailwind CSS, EF Core, SQLite | Clean Architecture, Injeção de Dependências, Testes unitários/integração (xUnit), Testes E2E (Playwright), Docker Compose | [Acessar Projeto](file:///c:/Projetos/Trampo%20teste/minhas-financas) |
 | **Educon Test Automation** | Suíte corporativa de testes automatizados E2E para o portal do aluno. | Cypress, Cucumber (BDD), JavaScript, Allure Reports, Husky | Login via SSO, Injeção de variáveis de ambiente seguras, Relatórios visuais avançados, Execução paralela | [Acessar Projeto](file:///c:/Projetos/Trampo%20teste/educon-test-automation) |
+---
+
+## 📐 Arquitetura dos Projetos
+
+### 1. Minhas Finanças (Clean Architecture)
+
+O design do backend segue os princípios da **Arquitetura Limpa (Clean Architecture)**, isolando as regras de negócios centrais (Domínio) dos detalhes de infraestrutura (Banco de dados) e apresentação (API REST). As dependências apontam sempre de fora para dentro.
+
+```mermaid
+graph TD
+    classDef default fill:#1f2937,stroke:#374151,stroke-width:1px,color:#f3f4f6;
+    classDef domain fill:#065f46,stroke:#047857,stroke-width:2px,color:#ecfdf5;
+    classDef app fill:#1e3a8a,stroke:#1d4ed8,stroke-width:2px,color:#dbeafe;
+    classDef infra fill:#78350f,stroke:#b45309,stroke-width:2px,color:#fef3c7;
+    classDef presentation fill:#581c87,stroke:#7e22ce,stroke-width:2px,color:#f3e8ff;
+
+    subgraph "Minhas Finanças — Arquitetura Limpa"
+        Web[React SPA Frontend] <--> API[MinhasFinancas.API - Presenter]
+        
+        API --> App[MinhasFinancas.Application - Regras de Aplicação]
+        App --> Domain[MinhasFinancas.Domain - Core de Domínio]
+        
+        Infra[MinhasFinancas.Infrastructure - Acesso a Dados] --> EF[EF Core & SQLite Database]
+        
+        %% Dependency Inversion
+        Infra -.->|Implementa Interfaces| Domain
+        App -.->|Usa Interfaces| Domain
+    end
+
+    class Domain domain;
+    class App app;
+    class Infra,EF infra;
+    class Web,API presentation;
+```
+
+### 2. Educon Test Automation (POM + BDD)
+
+A suíte de testes do Cypress foi arquitetada utilizando o **Page Object Model (POM)** acoplado com **Cucumber (BDD)**. Isso separa a escrita de cenários de negócios em linguagem natural (Gherkin) dos scripts de interação e assertions da página.
+
+```mermaid
+graph LR
+    classDef default fill:#1f2937,stroke:#374151,stroke-width:1px,color:#f3f4f6;
+    classDef bdd fill:#065f46,stroke:#047857,stroke-width:2px,color:#ecfdf5;
+    classDef code fill:#1e3a8a,stroke:#1d4ed8,stroke-width:2px,color:#dbeafe;
+    classDef engine fill:#581c87,stroke:#7e22ce,stroke-width:2px,color:#f3e8ff;
+    classDef output fill:#78350f,stroke:#b45309,stroke-width:2px,color:#fef3c7;
+
+    subgraph "Educon Test Automation — BDD & POM"
+        Feature["Especificações BDD (.feature)"] --> Steps["Definição de Passos (Step Definitions)"]
+        Steps --> Pages["Páginas Encapsuladas (Page Objects)"]
+        Pages --> Cypress["Cypress Test Engine"]
+        Cypress --> SSO["Autenticação via SSO (Staging)"]
+        Cypress --> Report["Relatório Allure (HTML Report)"]
+    end
+
+    class Feature bdd;
+    class Steps,Pages code;
+    class Cypress,SSO engine;
+    class Report output;
+```
 
 ---
 
