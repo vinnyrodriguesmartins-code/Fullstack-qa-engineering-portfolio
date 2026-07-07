@@ -116,47 +116,33 @@ c:/Projetos/Trampo teste/
 
 ---
 
-## 🔒 Segurança e Privacidade de Dados
+## 🔒 Segurança e Privacidade de Dados (DevSecOps)
 
-Este repositório foi configurado seguindo as melhores práticas de **Segurança de Informação (DevSecOps)** para evitar o vazamento de segredos corporativos ou dados de produção:
+Este repositório foi estruturado seguindo rigorosas práticas de segurança da informação para blindar dados corporativos e credenciais confidenciais:
 
-> [!IMPORTANT]
-> - **Credenciais Cypress Protegidas**: O arquivo `cypress.env.json` com senhas reais e tokens da API foi removido do rastreamento do Git e adicionado ao `.gitignore` global. Em seu lugar, foi disponibilizado o template [cypress.env.example.json](file:///c:/Projetos/Trampo%20teste/educon-test-automation/cypress.env.example.json) para que novos desenvolvedores possam preencher suas próprias credenciais locais de teste.
-> - **Bancos de Dados SQLite Locais Omitidos**: Os arquivos `.db` gerados em tempo de execução foram removidos do histórico de rastreamento do Git, permitindo que a aplicação gere novas bases limpas na inicialização local, sem poluir o histórico ou vazar dados residuais.
-> - **Exclusão de Relatórios Temporários**: Pastas como `allure-results/`, `allure-report/`, `cypress/screenshots/` e `cypress/videos/` são dinamicamente ignoradas para manter o repositório leve.
+| Recurso Sensível | Localização Original | Status no Git | Estratégia de Segurança |
+| :--- | :--- | :--- | :--- |
+| **Credenciais de Acesso** | `educon-test-automation/cypress.env.json` | 🚫 **Ignorado** | Excluído do controle de versão. Disponibilizado o template genérico [cypress.env.example.json](file:///c:/Projetos/Trampo%20teste/educon-test-automation/cypress.env.example.json) para preenchimento individual local. |
+| **Banco de Dados Local** | `minhas-financas/api/MinhasFinancas.API/*.db`<br>`minhas-financas/data/*.db` | 🚫 **Ignorado** | Arquivos SQLite removidos do rastreamento para evitar vazamento de dados de simulações. A aplicação gera bases de dados zeradas na primeira execução. |
+| **Relatórios e Mídias** | `educon-test-automation/allure-results/`<br>`educon-test-automation/allure-report/`<br>`cypress/screenshots/`<br>`cypress/videos/` | 🚫 **Ignorado** | Relatórios locais e mídias de falha de teste são ignorados para manter a árvore do repositório leve e sem arquivos gerados dinamicamente. |
+| **Variáveis de Ambiente** | `.env`, `.env.local` | 🚫 **Ignorado** | Arquivos de ambiente locais do React/Node.js são excluídos de commits de forma global. |
 
 ---
 
 ## 🛠️ Como Iniciar Localmente
 
-### 1. Clonar e Inicializar o Repositório
-```bash
-git clone <URL_DO_REPOSITORIO>
-cd Trampo-teste
-```
+### Guia Rápido de Execução
 
-### 2. Rodar Minhas Finanças (API + Web)
-O projeto está Dockerizado, bastando rodar:
-```bash
-cd minhas-financas
-docker-compose up --build
-```
-- **API Swagger**: http://localhost:5000/swagger
-- **Frontend SPA**: http://localhost:5173
-
-### 3. Rodar Testes de Automação do Aluno (Cypress)
-Instale as dependências e configure o ambiente:
-```bash
-cd educon-test-automation
-npm install
-
-# Crie seu arquivo de credenciais a partir do modelo
-cp cypress.env.example.json cypress.env.json
-# Preencha suas credenciais reais no cypress.env.json
-
-# Para abrir o Cypress Test Runner interativo:
-npm run test
-```
+| Objetivo | Diretório de Trabalho | Comando | Descrição / Resultado |
+| :--- | :--- | :--- | :--- |
+| **Rodar Aplicação Finanças** | `minhas-financas/` | `docker-compose up --build` | Executa o backend (.NET) e frontend (React) em containers. |
+| **Acessar API Swagger** | — | — | Acesse `http://localhost:5000/swagger` no navegador com a API rodando. |
+| **Acessar Frontend Web** | — | — | Acesse `http://localhost:5173` no navegador. |
+| **Instalar Cypress** | `educon-test-automation/` | `npm install` | Instala as dependências necessárias para a suíte de testes de QA. |
+| **Configurar Segredos** | `educon-test-automation/` | `cp cypress.env.example.json cypress.env.json` | Cria o arquivo de credenciais local (preencha-o antes de rodar os testes). |
+| **Executar Testes Cypress** | `educon-test-automation/` | `npm run test` | Abre o Cypress Test Runner interativo para execução dos cenários. |
+| **Restauração do Backend C#** | `minhas-financas/tests/backend/` | `dotnet restore MinhasFinancas.Tests.sln` | Restaura dependências NuGet do backend de testes. |
+| **Rodar Testes de Unidade C#** | `minhas-financas/tests/backend/` | `dotnet test MinhasFinancas.UnitTests/MinhasFinancas.UnitTests.csproj` | Roda os testes unitários do backend .NET. |
 
 ---
 
