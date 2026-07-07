@@ -2,7 +2,7 @@ import path from "node:path";
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 
-const appRoot = path.resolve(__dirname, "../../ExameDesenvolvedorDeTestes/web");
+const appRoot = path.resolve(__dirname, "../../web");
 const testRoot = __dirname;
 
 export default defineConfig({

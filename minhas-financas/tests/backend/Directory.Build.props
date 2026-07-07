@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <!-- Caminho para o código-fonte da aplicação (agora na raiz do subprojeto). -->
+    <AppRoot Condition="'$(AppRoot)' == ''">$(MSBuildThisFileDirectory)../..</AppRoot>
+    <ApiRoot>$(AppRoot)/api</ApiRoot>
+  </PropertyGroup>
+</Project>

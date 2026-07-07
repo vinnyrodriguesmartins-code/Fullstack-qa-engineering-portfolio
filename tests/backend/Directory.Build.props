@@ -1,7 +1,0 @@
-<Project>
-  <PropertyGroup>
-    <!-- Caminho para o código-fonte da aplicação (não versionado neste repositório). -->
-    <AppRoot Condition="'$(AppRoot)' == ''">$(MSBuildThisFileDirectory)../../ExameDesenvolvedorDeTestes</AppRoot>
-    <ApiRoot>$(AppRoot)/api</ApiRoot>
-  </PropertyGroup>
-</Project>

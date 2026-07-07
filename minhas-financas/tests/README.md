@@ -12,19 +12,17 @@ Repositório **somente de testes** para o sistema de controle de gastos residenc
 
 ### Código-fonte da aplicação
 
-Clone a aplicação **ao lado** deste repositório, mantendo a estrutura:
+A aplicação e a suíte de testes estão unificadas nesta mesma pasta do projeto (`minhas-financas`), com a seguinte estrutura:
 
-```
-ExameDesenvolvedorDeTestes/
-├── ExameDesenvolvedorDeTestes/   ← aplicação (api + web)
-└── tests/                        ← este repositório
+```text
+minhas-financas/
+├── api/             ← Backend .NET 9 Web API
+├── web/             ← Frontend React + TypeScript
+├── data/            ← SQLite Database (local)
+└── tests/           ← Testes (este diretório)
 ```
 
-O caminho padrão é resolvido em `backend/Directory.Build.props` (`AppRoot`). Para outro layout:
-
-```bash
-dotnet test -p:AppRoot="C:/caminho/para/ExameDesenvolvedorDeTestes"
-```
+O caminho é resolvido automaticamente em `backend/Directory.Build.props` (`AppRoot`).
 
 ## Pirâmide de testes
 

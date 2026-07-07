@@ -1,26 +1,86 @@
-# Build and dependency artifacts
-bin/
-obj/
-out/
-dist/
-coverage/
-node_modules/
-.vite/
-.next/
-
-# Environment and runtime files
-.env
-.env.*
-*.db
-*.sqlite
-*.sqlite3
-*.log
-*.user
-*.suo
+# ==========================================
+# Root .gitignore for Project Portfolio
+# ==========================================
 
 # OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 
-# Ignore duplicate local repo copy
-ExameDesenvolvedorDeTestes/
+# Environment and runtime files (credentials, keys)
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env.json
+cypress.env.json
+
+# Databases (SQLite and others)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+*.log
+
+# ==========================================
+# C# / .NET Core
+# ==========================================
+bin/
+obj/
+out/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ==========================================
+# Node.js / React / Cypress
+# ==========================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+lerna-debug.log*
+.bun/
+bun.lockb
+
+# Build and static compile outputs
+dist/
+dist-ssr/
+build/
+.next/
+.vite/
+.astro/
+.output/
+
+# Testing and Reports
+allure-results/
+allure-report/
+cypress/screenshots/
+cypress/videos/
+cypress/downloads/
+coverage/
+.nyc_output/
+.playwright/
+playwright-report/
+test-results/
+html-report/
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.suo
+*.ntvsca*
+*.njsproj
+

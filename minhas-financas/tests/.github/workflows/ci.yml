@@ -13,20 +13,9 @@ jobs:
   backend-tests:
     runs-on: ubuntu-latest
     steps:
-      # Baixa o repositório contendo os testes
-      - name: Checkout tests
+      # Baixa o repositório contendo a aplicação e os testes
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          path: tests
-
-      # Baixa o código-fonte da aplicação a ser testada (necessário para compilação/dependências)
-      - name: Checkout application source
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ vars.APP_SOURCE_REPO }}
-          path: ExameDesenvolvedorDeTestes
-          token: ${{ secrets.APP_SOURCE_TOKEN }}
-        continue-on-error: true
 
       # Configura o ambiente com a versão do .NET necessária
       - name: Setup .NET
@@ -36,7 +25,7 @@ jobs:
 
       # Restaura pacotes NuGet e executa a suíte de testes xUnit do backend
       - name: Restore and test backend
-        working-directory: tests/backend
+        working-directory: minhas-financas/tests/backend
         run: |
           dotnet restore MinhasFinancas.Tests.sln
           dotnet test MinhasFinancas.Tests.sln --no-restore --verbosity normal
@@ -45,20 +34,9 @@ jobs:
   frontend-unit:
     runs-on: ubuntu-latest
     steps:
-      # Baixa os arquivos de teste
-      - name: Checkout tests
+      # Baixa o repositório
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          path: tests
-
-      # Baixa o código do frontend (necessário para validar lógica do projeto e schemas)
-      - name: Checkout application source (web)
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ vars.APP_SOURCE_REPO }}
-          path: ExameDesenvolvedorDeTestes
-          token: ${{ secrets.APP_SOURCE_TOKEN }}
-        continue-on-error: true
 
       # Instala o Node.js e configura cache para instalação rápida do npm
       - name: Setup Node
@@ -66,11 +44,11 @@ jobs:
         with:
           node-version: "20"
           cache: npm
-          cache-dependency-path: tests/frontend/package.json
+          cache-dependency-path: minhas-financas/tests/frontend/package.json
 
       # Instala dependências do frontend de testes e executa o Vitest
       - name: Install and run Vitest
-        working-directory: tests/frontend
+        working-directory: minhas-financas/tests/frontend
         run: |
           npm ci || npm install
           npm run test:unit
@@ -82,11 +60,9 @@ jobs:
     needs: [backend-tests, frontend-unit]
     if: vars.RUN_E2E == 'true' # Roda somente se a variável de ambiente permitir
     steps:
-      # Baixa os testes
-      - name: Checkout tests
+      # Baixa o repositório
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          path: tests
 
       # Instala o Node.js
       - name: Setup Node
@@ -96,14 +72,14 @@ jobs:
 
       # Instala dependências e os navegadores virtuais necessários para o Playwright
       - name: Install Playwright
-        working-directory: tests/frontend
+        working-directory: minhas-financas/tests/frontend
         run: |
           npm ci || npm install
           npx playwright install --with-deps chromium
 
       # Executa os testes automatizados simulando ações reais do usuário no navegador
       - name: Run E2E
-        working-directory: tests/frontend
+        working-directory: minhas-financas/tests/frontend
         env:
           WEB_BASE_URL: ${{ vars.WEB_BASE_URL }}
           API_BASE_URL: ${{ vars.API_BASE_URL }}
