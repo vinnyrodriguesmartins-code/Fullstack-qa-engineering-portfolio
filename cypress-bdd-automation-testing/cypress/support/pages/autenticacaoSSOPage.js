@@ -31,8 +31,9 @@ class autenticacaoSSOPage {
     }
 
     validarLoginComSucesso() {
-      cy.contains('span', 'Aluno: marcos.pereira@afya.com')
-        .log('✅ Login via SSO com autenticação bem-sucedida e VPN conectada');
+      const email = Cypress.env("LoginNovaLLL_Marcos")?.email || "marcos.pereira@example.com";
+      cy.contains("span", `Aluno: ${email}`)
+        .log("✅ Login via SSO com autenticação bem-sucedida");
     }
 
     validarAreaLogada() {
@@ -50,12 +51,12 @@ class autenticacaoSSOPage {
     preencherLoginComCredenciaisInvalidas() {
       cy.get(this.inputEmail)
         .should('exist')
-        .type('marcos.perreira@afya.com')
+        .type("usuario-invalido@example.com")
         .wait(2000);
 
       cy.get(this.inputSenha)
         .should('exist')
-        .type('senha123')
+        .type("SenhaIncorreta999")
         .wait(2000);
 
       cy.get(this.buttonEntrar)
