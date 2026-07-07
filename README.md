@@ -24,8 +24,8 @@ Seja bem-vindo(a) ao meu portfólio de engenharia de software! Este repositório
 
 | Projeto | Descrição | Stack Principal | Destaques Técnicos | Link de Acesso |
 | :--- | :--- | :--- | :--- | :---: |
-| **Finances App (Clean Arch)** | Sistema completo para controle de despesas e receitas domésticas com foco em segurança OWASP. | .NET 9, React, Vite, Tailwind CSS, EF Core, SQLite | Clean Architecture, Injeção de Dependências, Testes unitários/integração (xUnit), Testes E2E (Playwright), Docker Compose | [Acessar Projeto](file:///c:/Projetos/Trampo%20teste/finances-app-clean-arch) |
-| **Cypress BDD Automation Testing** | Suíte corporativa de testes automatizados E2E para o portal do aluno. | Cypress, Cucumber (BDD), JavaScript, Allure Reports, Husky | Login via SSO, Injeção de variáveis de ambiente seguras, Relatórios visuais avançados, Execução paralela | [Acessar Projeto](file:///c:/Projetos/Trampo%20teste/cypress-bdd-automation-testing) |
+| **Finances App (Clean Arch)** | Sistema completo para controle de despesas e receitas domésticas com foco em segurança OWASP. | .NET 9, React, Vite, Tailwind CSS, EF Core, SQLite | Clean Architecture, Injeção de Dependências, Testes unitários/integração (xUnit), Testes E2E (Playwright com Page Object Model - POM), Relatório de Bugs e Evidências | [Acessar Projeto](file:///c:/Projetos/Trampo%20teste/finances-app-clean-arch) |
+| **Cypress BDD Automation Testing** | Suíte corporativa de testes automatizados E2E para o portal do aluno. | Cypress, Cucumber (BDD), JavaScript, Allure Reports, Husky | Login via SSO, Injeção de variáveis de ambiente seguras, Relatórios visuais avançados, Execução paralela (POM + BDD) | [Acessar Projeto](file:///c:/Projetos/Trampo%20teste/cypress-bdd-automation-testing) |
 | **k6 Performance Testing** | Simulação de carga e estresse automatizados contra a API REST para validação de latência. | JavaScript (ES6), Grafana k6 | Ramping de usuários virtuais concorrentes, Definição de thresholds de SLA, Monitoramento de latência e taxa de erro | [Acessar Projeto](file:///c:/Projetos/Trampo%20teste/k6-performance-testing) |
 
 ---
@@ -142,7 +142,8 @@ c:/Projetos/Trampo teste/
 │   ├── data/                     # Pasta do SQLite Local (minhasfinancas.db)
 │   ├── tests/                    # Suíte unificada de Garantia de Qualidade (QA)
 │   │   ├── backend/              # Testes do C# (Unitários e de Integração com xUnit)
-│   │   └── frontend/             # Testes do React (Vitest e E2E Playwright)
+│   │   ├── frontend/             # Testes do React (Vitest e E2E Playwright com POM)
+│   │   └── docs/bugs/            # Evidências e relatórios detalhados de bugs encontrados (Markdown)
 │   └── docker-compose.yml        # Orquestrador local da API + Web em containers
 │
 ├── cypress-bdd-automation-testing/ # Automação Cypress para Área do Aluno
