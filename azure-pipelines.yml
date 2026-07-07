@@ -1,0 +1,84 @@
+# Azure Pipelines CI/CD para o Portfólio de Engenharia
+# Controla a integração contínua (CI) no Azure DevOps
+
+trigger:
+  branches:
+    include:
+      - main
+      - master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+  dotnetVersion: '9.x'
+  nodeVersion: '20.x'
+
+stages:
+  # ESTÁGIO 1: Compilação e Testes do Backend (.NET 9)
+  - stage: BackendCI
+    displayName: 'Backend (.NET 9) CI'
+    jobs:
+      - job: BuildAndTestCsharp
+        displayName: 'Build & Test .NET Core'
+        steps:
+          - task: UseDotNet@2
+            displayName: 'Instalar .NET SDK'
+            inputs:
+              packageType: 'sdk'
+              version: $(dotnetVersion)
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Restaurar Pacotes NuGet'
+            inputs:
+              command: 'restore'
+              projects: 'finances-app-clean-arch/tests/backend/MinhasFinancas.Tests.sln'
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Compilar Solução .NET'
+            inputs:
+              command: 'build'
+              projects: 'finances-app-clean-arch/tests/backend/MinhasFinancas.Tests.sln'
+              arguments: '--configuration $(buildConfiguration) --no-restore'
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Executar Testes de Unidade xUnit'
+            inputs:
+              command: 'test'
+              projects: 'finances-app-clean-arch/tests/backend/MinhasFinancas.UnitTests/MinhasFinancas.UnitTests.csproj'
+              arguments: '--configuration $(buildConfiguration) --no-build --no-restore'
+
+          # Publica os binários compilados como artefato para deploy
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publicar Artefato da API Backend'
+            inputs:
+              targetPath: 'finances-app-clean-arch/api/MinhasFinancas.API/bin/$(buildConfiguration)/net9.0'
+              artifact: 'backend-api'
+              publishLocation: 'pipeline'
+
+  # ESTÁGIO 2: Compilação do Frontend (React 19 + TypeScript + Vite)
+  - stage: FrontendCI
+    displayName: 'Frontend (React) CI'
+    jobs:
+      - job: BuildReactSPA
+        displayName: 'Build React Application'
+        steps:
+          - task: NodeTool@0
+            displayName: 'Instalar Node.js'
+            inputs:
+              versionSpec: $(nodeVersion)
+
+          - script: |
+              npm ci || npm install
+              npm run build
+            displayName: 'Instalar Dependências e Compilar Bundle de Produção'
+            workingDirectory: 'finances-app-clean-arch/web'
+
+          # Publica a pasta dist compilada estaticamente para hospedagem
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publicar Artefato do Frontend React'
+            inputs:
+              targetPath: 'finances-app-clean-arch/web/dist'
+              artifact: 'frontend-spa'
+              publishLocation: 'pipeline'

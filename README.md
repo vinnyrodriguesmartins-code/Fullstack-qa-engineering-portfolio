@@ -1,6 +1,6 @@
 # ✨ PORTFÓLIO DE PROJETOS — DEVS HUB ✨
 
-Seja bem-vindo(a) ao meu portfólio de engenharia de software! Este repositório unifica projetos reais desenvolvidos com foco em **Arquitetura Limpa**, **Segurança**, **Qualidade de Software** e **Testes Automatizados (E2E & Unitários)**.
+Seja bem-vindo(a) ao meu portfólio de engenharia de software! Este repositório unifica projetos reais desenvolvidos com foco em **Arquitetura Limpa**, **Segurança**, **Qualidade de Software**, **Testes Automatizados (E2E & Unitários)**, **Testes de Performance** e **Práticas Modernas de DevSecOps/CI/CD**.
 
 ---
 
@@ -12,6 +12,8 @@ Seja bem-vindo(a) ao meu portfólio de engenharia de software! Este repositório
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![Cypress](https://img.shields.io/badge/Cypress-17202C?style=for-the-badge&logo=cypress&logoColor=white)
 ![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
+![k6](https://img.shields.io/badge/k6-7F6BE3?style=for-the-badge&logo=k6&logoColor=white)
+![Azure](https://img.shields.io/badge/Azure-0078D4?style=for-the-badge&logo=microsoft-azure&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
@@ -22,8 +24,9 @@ Seja bem-vindo(a) ao meu portfólio de engenharia de software! Este repositório
 
 | Projeto | Descrição | Stack Principal | Destaques Técnicos | Link de Acesso |
 | :--- | :--- | :--- | :--- | :---: |
-| **Finances App (Clean Arch)** | Sistema completo para controle de despesas e receitas domésticas. | .NET 9, React, Vite, Tailwind CSS, EF Core, SQLite | Clean Architecture, Injeção de Dependências, Testes unitários/integração (xUnit), Testes E2E (Playwright), Docker Compose | [Acessar Projeto](file:///c:/Projetos/Trampo%20teste/finances-app-clean-arch) |
+| **Finances App (Clean Arch)** | Sistema completo para controle de despesas e receitas domésticas com foco em segurança OWASP. | .NET 9, React, Vite, Tailwind CSS, EF Core, SQLite | Clean Architecture, Injeção de Dependências, Testes unitários/integração (xUnit), Testes E2E (Playwright), Docker Compose | [Acessar Projeto](file:///c:/Projetos/Trampo%20teste/finances-app-clean-arch) |
 | **Cypress BDD Automation Testing** | Suíte corporativa de testes automatizados E2E para o portal do aluno. | Cypress, Cucumber (BDD), JavaScript, Allure Reports, Husky | Login via SSO, Injeção de variáveis de ambiente seguras, Relatórios visuais avançados, Execução paralela | [Acessar Projeto](file:///c:/Projetos/Trampo%20teste/cypress-bdd-automation-testing) |
+| **k6 Performance Testing** | Simulação de carga e estresse automatizados contra a API REST para validação de latência. | JavaScript (ES6), Grafana k6 | Ramping de usuários virtuais concorrentes, Definição de thresholds de SLA, Monitoramento de latência e taxa de erro | [Acessar Projeto](file:///c:/Projetos/Trampo%20teste/k6-performance-testing) |
 
 ---
 
@@ -31,7 +34,7 @@ Seja bem-vindo(a) ao meu portfólio de engenharia de software! Este repositório
 
 ### 1. Finances App (Clean Architecture)
 
-O design do backend segue os princípios da **Arquitetura Limpa (Clean Architecture)**, isolando as regras de negócios centrais (Domínio) dos detalhes de infraestrutura (Banco de dados) e apresentação (API REST). As dependências apontam sempre de fora para dentro.
+O design do backend segue os princípios da **Arquitetura Limpa (Clean Architecture)**, isolando as regras de negócios centrais (Domínio) dos detalhes de infraestrutura (Banco de dados) e apresentação (API REST).
 
 ```mermaid
 graph TD
@@ -62,7 +65,7 @@ graph TD
 
 ### 2. Cypress BDD Automation Testing (POM + BDD)
 
-A suíte de testes do Cypress foi arquitetada utilizando o **Page Object Model (POM)** acoplado com **Cucumber (BDD)**. Isso separa a escrita de cenários de negócios em linguagem natural (Gherkin) dos scripts de interação e assertions da página.
+A suíte de testes do Cypress foi arquitetada utilizando o **Page Object Model (POM)** acoplado com **Cucumber (BDD)** para separar cenários de negócios em linguagem natural dos scripts de assertions.
 
 ```mermaid
 graph LR
@@ -86,6 +89,35 @@ graph LR
     class Report output;
 ```
 
+### 3. Fluxo DevOps & Nuvem (CI/CD Azure DevOps + IaC)
+
+O ecossistema DevOps é orquestrado de forma moderna utilizando pipeline automatizado no Azure Pipelines com provisionamento via código (IaC) com arquivos Bicep:
+
+```mermaid
+graph LR
+    classDef default fill:#1f2937,stroke:#374151,stroke-width:1px,color:#f3f4f6;
+    classDef pipeline fill:#1e3a8a,stroke:#1d4ed8,stroke-width:2px,color:#dbeafe;
+    classDef iac fill:#78350f,stroke:#b45309,stroke-width:2px,color:#fef3c7;
+    classDef cloud fill:#0369a1,stroke:#0284c7,stroke-width:2px,color:#e0f2fe;
+
+    subgraph "Fluxo DevOps e Cloud Azure"
+        Push[Git Push / PR] --> AzPipelines["Azure Pipelines (azure-pipelines.yml)"]
+        AzPipelines --> BuildDotnet["Build & Test Backend (.NET)"]
+        AzPipelines --> BuildReact["Build Frontend (React SPA)"]
+        
+        Bicep["IaC Azure Bicep (main.bicep)"] --> DeployApp["Provisionar Recursos (CLI/Portal)"]
+        
+        BuildDotnet --> Deploy["Deploy Automático"]
+        BuildReact --> Deploy
+        DeployApp --> AzureWebApp["Azure App Service (Linux Web App)"]
+        Deploy --> AzureWebApp
+    end
+
+    class AzPipelines,BuildDotnet,BuildReact,Deploy pipeline;
+    class Bicep,DeployApp iac;
+    class AzureWebApp cloud;
+```
+
 ---
 
 ## 🏛️ Estrutura Organizada do Repositório
@@ -94,6 +126,7 @@ Esta é a estrutura de diretórios unificada e limpa que organiza todos os proje
 
 ```text
 c:/Projetos/Trampo teste/
+├── azure-pipelines.yml           # CI/CD Pipeline do Azure DevOps (YAML)
 ├── finances-app-clean-arch/      # Sistema de Controle de Gastos Residenciais
 │   ├── api/                      # Backend .NET 9 Web API
 │   │   ├── MinhasFinancas.API/          # Camada de apresentação e controladores
@@ -107,12 +140,20 @@ c:/Projetos/Trampo teste/
 │   │   └── frontend/             # Testes do React (Vitest e E2E Playwright)
 │   └── docker-compose.yml        # Orquestrador local da API + Web em containers
 │
-└── cypress-bdd-automation-testing/ # Automação Cypress para Área do Aluno
-    ├── cypress/                  # Testes BDD (.feature), Definição de passos (Steps) e Page Objects
-    │   ├── e2e/                  # Funcionalidades e fluxos simulados
-    │   └── support/              # Comandos customizados Cypress e configurações
-    ├── package.json              # Dependências e scripts de teste
-    └── cypress.env.example.json  # Modelo para configuração das credenciais SSO
+├── cypress-bdd-automation-testing/ # Automação Cypress para Área do Aluno
+│   ├── cypress/                  # Testes BDD (.feature), Definição de passos (Steps) e Page Objects
+│   │   ├── e2e/                  # Funcionalidades e fluxos simulados
+│   │   └── support/              # Comandos customizados Cypress e configurações
+│   ├── package.json              # Dependências e scripts de teste
+│   └── cypress.env.example.json  # Modelo para configuração das credenciais SSO
+│
+├── k6-performance-testing/       # Testes de carga e estresse com Grafana k6
+│   ├── load-test.js              # Script k6 de simulação de carga
+│   └── README.md                 # Guia de instalação e limiares de aceitação de SLA
+│
+└── infrastructure-azure/         # Infraestrutura como Código (IaC) para nuvem Azure
+    ├── main.bicep                # Definição dos recursos a provisionar no Azure
+    └── parameters.json           # Parâmetros de parametrização de deploy do Bicep
 ```
 
 ---
@@ -142,6 +183,8 @@ Este repositório foi estruturado seguindo rigorosas práticas de segurança da 
 | **Instalar Cypress** | `cypress-bdd-automation-testing/` | `npm install` | Instala as dependências necessárias para a suíte de testes de QA. |
 | **Configurar Segredos** | `cypress-bdd-automation-testing/` | `cp cypress.env.example.json cypress.env.json` | Cria o arquivo de credenciais local (preencha-o antes de rodar os testes). |
 | **Executar Testes Cypress** | `cypress-bdd-automation-testing/` | `npm run test` | Abre o Cypress Test Runner interativo para execução dos cenários. |
+| **Executar Teste Carga k6** | `k6-performance-testing/` | `k6 run load-test.js` | Executa o teste completo de estresse e performance da API e valida SLAs. |
+| **Executar Teste Rápido k6** | `k6-performance-testing/` | `k6 run load-test.js --vus 1 --duration 1s` | Smoke test de validação rápida com 1 usuário e 1 iteração. |
 | **Restauração do Backend C#** | `finances-app-clean-arch/tests/backend/` | `dotnet restore MinhasFinancas.Tests.sln` | Restaura dependências NuGet do backend de testes. |
 | **Rodar Testes de Unidade C#** | `finances-app-clean-arch/tests/backend/` | `dotnet test MinhasFinancas.UnitTests/MinhasFinancas.UnitTests.csproj` | Roda os testes unitários do backend .NET. |
 
