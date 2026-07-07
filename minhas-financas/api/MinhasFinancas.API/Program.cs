@@ -8,6 +8,12 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Suppress server signature header in Kestrel (Nikto / DAST mitigation)
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.AddServerHeader = false;
+});
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSwaggerGen(options =>
@@ -18,14 +24,18 @@ builder.Services.AddSwaggerGen(options =>
 // Add Controllers
 builder.Services.AddControllers();
 
-// Add CORS
+// Add Secure CORS configuration (OWASP A05:2021)
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() 
+                     ?? new[] { "http://localhost:5173", "https://localhost:5173" };
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("DefaultPolicy", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials();
     });
 });
 
@@ -63,14 +73,22 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    // Enforce HSTS (OWASP A05:2021 / DAST)
+    app.UseHsts();
+}
 
 app.UseHttpsRedirection();
 
-// Use Exception Middleware
+// Use Security Headers Middleware (OWASP A03:2021 / Clickjacking / MIME-sniffing)
+app.UseSecurityHeadersMiddleware();
+
+// Use Exception Middleware (handles errors and prevents Information Disclosure)
 app.UseExceptionMiddleware();
 
-// Use CORS
-app.UseCors("AllowAll");
+// Use Secure CORS Policy
+app.UseCors("DefaultPolicy");
 
 // Use Controllers
 app.MapControllers();

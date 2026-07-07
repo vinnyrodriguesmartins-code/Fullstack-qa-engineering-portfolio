@@ -10,14 +10,16 @@ public class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<ExceptionMiddleware> _logger;
+    private readonly Microsoft.AspNetCore.Hosting.IWebHostEnvironment _env;
 
     /// <summary>
-    /// Construtor.
+    /// Construtor com injeção do ambiente web.
     /// </summary>
-    public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
+    public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
     {
         _next = next;
         _logger = logger;
+        _env = env;
     }
 
     /// <summary>
@@ -36,16 +38,21 @@ public class ExceptionMiddleware
         }
     }
 
-    private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+        // Oculta informações sensíveis em produção (OWASP A06:2021 / Information Disclosure)
+        var detailedError = _env.IsDevelopment() 
+            ? exception.Message 
+            : "Consulte os logs do servidor para obter mais informações.";
 
         var response = new
         {
             StatusCode = context.Response.StatusCode,
             Message = "Ocorreu um erro interno no servidor.",
-            Detailed = exception.Message
+            Detailed = detailedError
         };
 
         await context.Response.WriteAsync(JsonSerializer.Serialize(response));
