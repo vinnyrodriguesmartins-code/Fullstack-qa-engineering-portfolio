@@ -24,10 +24,11 @@ jobs:
           dotnet-version: "9.0.x"
 
       # Restaura pacotes NuGet e executa a suíte de testes xUnit do backend
-      - name: Restore and test backend
+      - name: Restore, Audit and test backend
         working-directory: finances-app-clean-arch/tests/backend
         run: |
           dotnet restore MinhasFinancas.Tests.sln
+          dotnet audit --severity high
           dotnet test MinhasFinancas.Tests.sln --no-restore --verbosity normal
 
   # TRABALHO 2: Executa testes unitários do frontend (React + Vitest)

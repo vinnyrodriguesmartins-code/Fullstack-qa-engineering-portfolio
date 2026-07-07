@@ -35,6 +35,10 @@ stages:
               command: 'restore'
               projects: 'finances-app-clean-arch/tests/backend/MinhasFinancas.Tests.sln'
 
+          - script: dotnet audit --severity high
+            displayName: 'Auditar Pacotes NuGet (Segurança - OWASP)'
+            workingDirectory: 'finances-app-clean-arch/tests/backend'
+
           - task: DotNetCoreCLI@2
             displayName: 'Compilar Solução .NET'
             inputs:

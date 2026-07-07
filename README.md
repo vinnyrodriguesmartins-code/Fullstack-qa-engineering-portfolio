@@ -160,14 +160,18 @@ c:/Projetos/Trampo teste/
 
 ## 🔒 Segurança e Privacidade de Dados (DevSecOps)
 
-Este repositório foi estruturado seguindo rigorosas práticas de segurança da informação para blindar dados corporativos e credenciais confidenciais:
+Este repositório foi estruturado seguindo rigorosas práticas de segurança da informação e critérios da **OWASP Top 10** para blindar a aplicação contra ataques externos e evitar vazamento de credenciais:
 
-| Recurso Sensível | Localização Original | Status no Git | Estratégia de Segurança |
+| Recurso Sensível / Mecanismo | Localização Original | Status | Estratégia de Segurança / Proteção |
 | :--- | :--- | :--- | :--- |
-| **Credenciais de Acesso** | `cypress-bdd-automation-testing/cypress.env.json` | 🚫 **Ignorado** | Excluído do controle de versão. Disponibilizado o template genérico [cypress.env.example.json](file:///c:/Projetos/Trampo%20teste/cypress-bdd-automation-testing/cypress.env.example.json) para preenchimento individual local. |
+| **Credenciais de Acesso** | `cypress-bdd-automation-testing/cypress.env.json` | 🚫 **Ignorado** | Excluído do controle de versão. Disponibilizado o template genérico [cypress.env.example.json](file:///c:/Projetos/Trampo%20teste/cypress-bdd-automation-testing/cypress.env.example.json) para preenchimento local. |
 | **Banco de Dados Local** | `finances-app-clean-arch/api/MinhasFinancas.API/*.db`<br>`finances-app-clean-arch/data/*.db` | 🚫 **Ignorado** | Arquivos SQLite removidos do rastreamento para evitar vazamento de dados de simulações. A aplicação gera bases de dados zeradas na primeira execução. |
-| **Relatórios e Mídias** | `cypress-bdd-automation-testing/allure-results/`<br>`cypress-bdd-automation-testing/allure-report/`<br>`cypress/screenshots/`<br>`cypress/videos/` | 🚫 **Ignorado** | Relatórios locais e mídias de falha de teste são ignorados para manter a árvore do repositório leve e sem arquivos gerados dinamicamente. |
-| **Variáveis de Ambiente** | `.env`, `.env.local` | 🚫 **Ignorado** | Arquivos de ambiente locais do React/Node.js são excluídos de commits de forma global. |
+| **Relatórios e Mídias** | `cypress-bdd-automation-testing/allure-results/`<br>`cypress-bdd-automation-testing/allure-report/` | 🚫 **Ignorado** | Relatórios locais e mídias de falha de teste são ignorados para manter a árvore do repositório leve. |
+| **Variáveis de Ambiente** | `.env`, `.env.local` | 🚫 **Ignorado** | Arquivos de ambiente locais do React/Node.js são excluídos de commits globalmente. |
+| **Controle de Carga (Rate Limiting)** | `finances-app-clean-arch/api/MinhasFinancas.API/Program.cs` | ✅ **Ativo** | Middleware de janela fixa restringindo chamadas a **100 requisições/min** por IP para prevenir ataques de força bruta, scraping e Denial of Service (DoS). |
+| **Auditoria de Vulnerabilidade (CI)** | `.github/workflows/ci.yml`<br>`azure-pipelines.yml` | ✅ **Ativo** | Execução automática de **`dotnet audit`** no pipeline de CI para analisar todas as bibliotecas NuGet. A compilação falha se pacotes inseguros forem detectados. |
+| **Headers de Segurança HTTP** | `api/MinhasFinancas.API/Middlewares/SecurityHeadersMiddleware.cs` | ✅ **Ativo** | Injeção de cabeçalhos de proteção como `X-Frame-Options: DENY` (anti-Clickjacking), `X-Content-Type-Options: nosniff` (anti-MIME Sniffing), `Content-Security-Policy` (CSP contra XSS) e desativação do banner do servidor (`Server: Kestrel`) contra scanners de vulnerabilidade (Nikto). |
+| **Sanitização de Exceções** | `api/MinhasFinancas.API/Middlewares/ExceptionMiddleware.cs` | ✅ **Ativo** | Tratamento de erros globais que oculta stack traces técnicos em ambientes de produção/QA para evitar vazamento de dados estruturais (Information Disclosure). |
 
 ---
 

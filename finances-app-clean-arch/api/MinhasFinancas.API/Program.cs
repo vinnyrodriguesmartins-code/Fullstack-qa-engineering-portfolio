@@ -5,6 +5,8 @@ using MinhasFinancas.Infrastructure;
 using MinhasFinancas.Infrastructure.Data;
 using Asp.Versioning;
 using System.Reflection;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,6 +55,19 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 // Add Application services
 builder.Services.AddApplicationServices();
 
+// Add Rate Limiting (OWASP A04:2021 / Anti-DoS & Brute Force Protection)
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddFixedWindowLimiter("api-limiter", opt =>
+    {
+        opt.PermitLimit = 100; // Máximo de 100 requisições
+        opt.Window = TimeSpan.FromMinutes(1); // Por minuto
+        opt.QueueLimit = 10;
+        opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+    });
+});
+
 var app = builder.Build();
 
 // Ensure database is created and seeded only in development
@@ -81,6 +96,9 @@ else
 
 app.UseHttpsRedirection();
 
+// Enable Rate Limiting (OWASP A04:2021)
+app.UseRateLimiter();
+
 // Use Security Headers Middleware (OWASP A03:2021 / Clickjacking / MIME-sniffing)
 app.UseSecurityHeadersMiddleware();
 
@@ -90,8 +108,8 @@ app.UseExceptionMiddleware();
 // Use Secure CORS Policy
 app.UseCors("DefaultPolicy");
 
-// Use Controllers
-app.MapControllers();
+// Use Controllers with Rate Limiting applied globally
+app.MapControllers().RequireRateLimiting("api-limiter");
 
 // Redirect root to Swagger UI for convenience
 app.MapGet("/", () => Results.Redirect("/swagger"));
