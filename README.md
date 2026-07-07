@@ -118,6 +118,11 @@ graph LR
     class AzureWebApp cloud;
 ```
 
+A pipeline do **Azure DevOps** (`azure-pipelines.yml`) foi desenhada com foco em rastreabilidade e governança de qualidade:
+* **Relatórios de Testes Integrados**: Executa os testes de backend (xUnit) e frontend (Vitest) gerando arquivos de resultados nos formatos padrão **TRX** (Visual Studio) e **JUnit** (XML). Os relatórios são publicados dinamicamente na aba **Tests** da execução da pipeline no Azure DevOps, apresentando taxa de sucesso, tempo de execução e gráficos de histórico.
+* **Segurança na Compilação (SAST)**: Roda o **`dotnet audit`** de dependências a cada compilação de backend para evitar pacotes inseguros em produção.
+* **Artefatos de Implantação**: Produz e armazena os artefatos compilados independentes da API e do SPA para deploys auditados.
+
 ---
 
 ## 🏛️ Estrutura Organizada do Repositório

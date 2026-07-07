@@ -51,7 +51,8 @@ stages:
             inputs:
               command: 'test'
               projects: 'finances-app-clean-arch/tests/backend/MinhasFinancas.UnitTests/MinhasFinancas.UnitTests.csproj'
-              arguments: '--configuration $(buildConfiguration) --no-build --no-restore'
+              arguments: '--configuration $(buildConfiguration) --no-build --no-restore --logger trx --results-directory $(Agent.TempDirectory)'
+              publishTestResults: true
 
           # Publica os binários compilados como artefato para deploy
           - task: PublishPipelineArtifact@1
@@ -72,6 +73,22 @@ stages:
             displayName: 'Instalar Node.js'
             inputs:
               versionSpec: $(nodeVersion)
+
+          # Executa testes unitários do Frontend e gera relatório JUnit
+          - script: |
+              npm ci || npm install
+              npm run test:unit -- --reporter=default --reporter=junit --outputFile=test-results.xml
+            displayName: 'Executar Testes Unitários Frontend (Vitest)'
+            workingDirectory: 'finances-app-clean-arch/tests/frontend'
+
+          # Publica o relatório de testes do frontend para o painel do Azure DevOps
+          - task: PublishTestResults@2
+            displayName: 'Publicar Relatório de Testes do Frontend (Vitest)'
+            inputs:
+              testResultsFormat: 'JUnit'
+              testResultsFiles: 'finances-app-clean-arch/tests/frontend/test-results.xml'
+              mergeTestResults: true
+              failTaskOnFailedTests: true
 
           - script: |
               npm ci || npm install
