@@ -35,12 +35,11 @@ public class ExclusaoCascataTests : ApiTestBase
 
         Assert.Equal(HttpStatusCode.NoContent, deleteResponse.StatusCode);
 
-        using var scope = Factory.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<MinhasFinancasDbContext>();
-
-        var transacoesRestantes = await db.Transacoes
-            .Where(t => t.PessoaId == pessoa.Id)
-            .CountAsync();
+        // Validação física direta no banco via SQL puro (evitando cache do EF Core)
+        var transacoesRestantes = await ExecuteScalarSqlAsync<long>(
+            "SELECT COUNT(*) FROM Transacoes WHERE PessoaId = @PessoaId",
+            ("@PessoaId", pessoa.Id.ToString())
+        );
 
         Assert.Equal(0, transacoesRestantes);
     }

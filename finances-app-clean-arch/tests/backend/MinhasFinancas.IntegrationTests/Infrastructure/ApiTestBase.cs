@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using MinhasFinancas.Application.DTOs;
 using MinhasFinancas.Domain.Entities;
 using Xunit;
@@ -61,4 +62,34 @@ public class ApiTestBase : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
 
     protected Task<HttpResponseMessage> CriarTransacaoAsync(CreateTransacaoDto dto) =>
         Client.PostAsJsonAsync("/api/v1.0/transacoes", dto);
+
+    /// <summary>
+    /// Executa uma query SQL escalar (ex: SELECT COUNT(*)) diretamente no banco de dados SQLite.
+    /// Utilizado para testes de integração de banco de dados (Database Testing / SQL Verification).
+    /// </summary>
+    protected async Task<T> ExecuteScalarSqlAsync<T>(string sql, params (string Name, object Value)[] parameters)
+    {
+        using var scope = Factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<MinhasFinancas.Infrastructure.Data.MinhasFinancasDbContext>();
+        var connection = db.Database.GetDbConnection();
+        
+        if (connection.State != System.Data.ConnectionState.Open)
+            await connection.OpenAsync();
+
+        using var command = connection.CreateCommand();
+        command.CommandText = sql;
+        foreach (var p in parameters)
+        {
+            var parameter = command.CreateParameter();
+            parameter.ParameterName = p.Name;
+            parameter.Value = p.Value;
+            command.Parameters.Add(parameter);
+        }
+
+        var result = await command.ExecuteScalarAsync();
+        if (result == null || result == DBNull.Value)
+            return default!;
+
+        return (T)Convert.ChangeType(result, typeof(T))!;
+    }
 }
