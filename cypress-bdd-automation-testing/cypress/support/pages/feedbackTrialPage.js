@@ -13,7 +13,7 @@ class feedbackTrialPage {
     
   
     acessarTabAprender() {
-      cy.visit('https://areaaluno.educon-stg.afya.systems/aprender')
+      cy.visit('/aprender')
       cy.url().should('include', '/aprender')
       cy.get(this.tabAprender)
         .should('contain.text', 'Aprender')
@@ -43,16 +43,20 @@ class feedbackTrialPage {
     }
 
     clicarBotaoProximo() {
-      cy.contains('button','Próximo')
+      cy.get('#step1, #step2, #step3')
+        .filter(':visible')
+        .contains('button', 'Próximo')
         .should('be.visible')
         .click({ force: true })
     }
     
     clicarBotaoVoltar() {
-      cy.contains('button','Voltar')
+      cy.get('#step1, #step2, #step3')
+        .filter(':visible')
+        .contains('button', 'Voltar')
         .should('be.visible')
         .click({ force: true })
-        .log('✅ Retorna para a tela de nota')
+        .log('✅ Retorna para a tela anterior')
     }  
 
     clicarBotaoEnviarFeedback() {
@@ -99,7 +103,8 @@ class feedbackTrialPage {
     }
 
     clicarBotaoX(){
-      cy.get(this.botaoX)
+      cy.get('#trialFeedbackModal')
+        .find(this.botaoX)
         .should('be.visible')
         .click({ force: true })
   }

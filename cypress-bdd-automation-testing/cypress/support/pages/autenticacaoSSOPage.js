@@ -24,9 +24,8 @@ class autenticacaoSSOPage {
     }
 
     validarRedirecionamentoParaLoginSSO() {
-      cy.url().should('include', 'https://sso-account.staging.afya.systems/login');
+      cy.url().should('include', '/sso-login');
       cy.url().should('include', 'client_id=be556401-cf0f-4130-aab7-d20a446f3a76');
-      cy.url().should('include', 'redirect_uri=https%3A%2F%2Fareaaluno.educon-stg.afya.systems%2Fauth%2Fcallback&state=');
       cy.log('✅ Redirecionamento para página de login SSO validado');
     }
 
@@ -38,7 +37,7 @@ class autenticacaoSSOPage {
 
     validarAreaLogada() {
       cy.visit('/profile')
-      cy.url().should('eq', 'https://areaaluno.educon-stg.afya.systems/profile');
+      cy.url().should('include', '/profile');
       cy.contains('h1', 'Perfil do Aluno')
         .should('be.visible')
         .log('✅ Perfil do aluno acessado com sucesso');

@@ -9,7 +9,7 @@ class certificadoAlunoPage {
   }
 
   acessarTelaCertificados() {
-    cy.visit('https://areaaluno.educon-stg.afya.systems/certificados');
+    cy.visit('/certificados');
     cy.url().should('include', '/certificados');
     cy.log('✅ Tela de Certificados carregada');
   }
@@ -25,7 +25,9 @@ class certificadoAlunoPage {
             id: 101,
             nome: nomeCurso,
             progresso: progressoPercentual,
-            concluido: progressoPercentual === 100
+            concluido: progressoPercentual === 100,
+            cargaHoraria: nomeCurso.includes('React') ? '40 horas' : '60 horas',
+            dataConclusao: nomeCurso.includes('React') ? '12/05/2025' : '18/06/2026'
           }
         ]
       });
@@ -39,7 +41,7 @@ class certificadoAlunoPage {
   solicitarEmissao() {
     cy.get(this.botaoEmitirCertificado)
       .should('be.visible')
-      .click()
+      .click({ force: true })
       .log('✅ Clicou no botão de emitir certificado');
   }
 

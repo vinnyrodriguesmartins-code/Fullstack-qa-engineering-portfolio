@@ -8,8 +8,10 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 });
 
 Given('que o aluno está autenticado e na tela de certificados', () => {
-  // Utiliza comando customizado ou simula bypass de login SSO
-  // Uses custom command or simulates SSO login bypass
+  // Visita a página inicial, clica no login SSO e então realiza o login
+  // Visits the initial page, clicks SSO login, and then performs login
+  cy.visit('/sign-in');
+  cy.contains('button', 'Entrar com SSO').click();
   cy.LoginNovaLLL_Marcos();
   certificadoPage.acessarTelaCertificados();
 });
@@ -76,6 +78,6 @@ Then('os campos de identificação devem exibir os dados corretos:', (dataTable)
   // Retrieves DataTable records
   const hashes = dataTable.hashes();
   hashes.forEach((row) => {
-    certificadoPage.validarInformacaoCertificado(row.Campo, row.ValorEsperado);
+    certificadoPage.validarInformacaoCertificado(row.Campo, row['Valor Esperado']);
   });
 });

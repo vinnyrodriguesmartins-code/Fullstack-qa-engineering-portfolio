@@ -23,7 +23,7 @@ class objetosVideosPage {
     }
 
     acessarVideo() {
-      cy.visit('https://areaaluno.educon-stg.afya.systems/video/65098424deccdb00080f04a1')
+      cy.visit('/video/65098424deccdb00080f04a1')
     }
 
     logarComSSO() {
@@ -181,7 +181,7 @@ class objetosVideosPage {
     }
 
     acessarVideoInvalido(){
-      cy.visit('https://areaaluno.educon-stg.afya.systems/video/68307486842907b2634000be')
+      cy.visit('/video/68307486842907b2634000be')
     }
 
     validaMensagemErro(){
@@ -194,7 +194,7 @@ class objetosVideosPage {
     }
 
     acessarCapitulosVideos() {
-      cy.visit('https://areaaluno.educon-stg.afya.systems/pocVideoChapters/5b7431cc7b9d2b6a6d9e9410')
+      cy.visit('/pocVideoChapters/5b7431cc7b9d2b6a6d9e9410')
     }
 
     clicarBotaoCapitulos() {

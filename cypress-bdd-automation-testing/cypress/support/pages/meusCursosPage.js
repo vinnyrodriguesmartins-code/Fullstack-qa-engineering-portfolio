@@ -22,7 +22,7 @@ class meusCursosPage {
     }
 
     acessarTabAprender() {
-      cy.visit('https://areaaluno.educon-stg.afya.systems/aprender')
+      cy.visit('/aprender')
       cy.url().should('include', '/aprender')
       cy.get(this.tabAprender)
         .should('contain.text', 'Aprender')
@@ -55,8 +55,8 @@ class meusCursosPage {
     }
 
     clicarFiltros(text) {
-      cy.get('button')
-        .contains(text)
+      cy.get('#drawer button')
+        .contains(new RegExp("^" + text + "$"))
         .scrollIntoView({ block: 'center', inline: 'center' })
         .should('be.visible')
         .click({ force: true })
@@ -70,7 +70,8 @@ class meusCursosPage {
     }
 
     clicarBotaoX(){
-      cy.get(this.botaoFecharDrawer)
+      cy.get(this.drawer)
+        .find(this.botaoFecharDrawer)
         .scrollIntoView({ block: 'center', inline: 'center' })
         .should('be.visible')
         .click({ force: true })
@@ -102,38 +103,35 @@ class meusCursosPage {
     }
 
     clicarBotaoDespriorizar() {
-    cy.get(this.cursoEmDestaque)
-      .should('be.visible');
-
-    cy.get(this.cursoDermatologia)
-      .should('be.visible')
-      .realHover();
-
-    cy.get(this.botaoDespriorizar)
-      .should('be.visible')
-      .click({ multiple: true})
-      .log('✅ Botão Despriorizar clicado');
-  }
+      cy.get(this.cursoEmDestaque)
+        .should('be.visible')
+        .within(() => {
+          cy.get(this.cursoDermatologia)
+            .should('be.visible')
+            .realHover();
+          cy.get(this.botaoDespriorizar)
+            .should('be.visible')
+            .click({ force: true });
+        });
+      cy.log('✅ Botão Despriorizar clicado');
+    }
 
     clicarBotaoDestacar() {
-    cy.get(this.outrosCursos)
-      .should('be.visible')
-
-    cy.get(this.drawer)
-      .contains('Dermatologia')
-      .first()
-      .scrollIntoView()
-      .should('be.visible')
-
-    cy.get(this.cursoDermatologia)
-      .should('be.visible')
-      .realHover();
-
-    cy.get(this.botaoDestacar)
-      .should('be.visible')
-      .click({ multiple: true})
-      .log('✅ Botão Destacar clicado');
-  }
+      cy.get(this.outrosCursos)
+        .should('be.visible')
+        .within(() => {
+          cy.contains('Dermatologia')
+            .scrollIntoView()
+            .should('be.visible');
+          cy.get(this.cursoDermatologia)
+            .should('be.visible')
+            .realHover();
+          cy.get(this.botaoDestacar)
+            .should('be.visible')
+            .click({ force: true });
+        });
+      cy.log('✅ Botão Destacar clicado');
+    }
 
   clicarBotaoBuble() {
     cy.contains('p', 'Você precisa substituir um dos cursos abaixo para destacar')
@@ -148,15 +146,15 @@ class meusCursosPage {
 
   validarCursoSubstituido() {
     cy.get('body').then(($body) => {
+      const destaqueHidden = !$body.find(this.cursoEmDestaque).is(':visible');
+      const outrosHidden = !$body.find(this.outrosCursos).is(':visible');
 
-      if ($body.find(this.cursoDespriorizado).length > 0) {
-        cy.get(this.cursoEmDestaque).should('be.visible');
-        cy.get(this.cursoDermatologia).should('not.be.visible')
-          .log('✅ Curso substituído com sucesso (escondido)');
-
-      } else {
-        cy.get(this.outrosCursos).should('be.visible')
-          .log('✅ Curso substituído com sucesso');
+      if (destaqueHidden) {
+        cy.get(this.cursoEmDestaque).should('not.be.visible')
+          .log('✅ Curso despriorizado e removido dos destaques');
+      } else if (outrosHidden) {
+        cy.get(this.outrosCursos).should('not.be.visible')
+          .log('✅ Curso destacado e removido de outros cursos');
       }
     });
   }

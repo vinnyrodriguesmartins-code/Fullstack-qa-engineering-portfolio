@@ -13,9 +13,9 @@ module.exports = defineConfig({
   screenshotOnRunFailure: false,
   viewportWidth: 1920,
   viewportHeight: 1080,
-  defaultCommandTimeout: 100000,
-  pageLoadTimeout: 100000,
-  requestTimeout: 100000,
+  defaultCommandTimeout: 10000,
+  pageLoadTimeout: 30000,
+  requestTimeout: 15000,
 
   fixturesFolder: "cypress/fixtures",
 
@@ -25,7 +25,7 @@ module.exports = defineConfig({
       // openMode: 1,
     },
 
-    baseUrl: "https://areaaluno.educon-stg.afya.systems/",
+    baseUrl: "http://localhost:3000/",
     downloadsFolder: "cypress/downloads",
     numTestsKeptInMemory: 1,
     experimentalMemoryManagement: true,
