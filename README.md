@@ -41,7 +41,7 @@ Seja bem-vindo(a) ao meu portfólio de engenharia focado em **Quality Assurance 
 | Projeto | Descrição | Stack Principal | Destaques Técnicos | Link de Acesso |
 | :--- | :--- | :--- | :--- | :---: |
 | **Finances App (Clean Arch)** | Sistema completo para controle de despesas e receitas domésticas com foco em segurança OWASP. | .NET 9, React, Vite, Tailwind CSS, EF Core, SQLite | Clean Architecture, Injeção de Dependências, Testes unitários/integração (xUnit & Bogus), Testes E2E (Playwright com POM), Acessibilidade Automatizada (Axe-Core a11y), Regressão Visual, Testes de Mutação (Stryker.NET), API Contract Testing (Schema Validation com Zod), Relatório de Bugs e Evidências | [Acessar Projeto](file:///c:/Projetos/Trampo%20teste/finances-app-clean-arch) |
-| **Cypress BDD Automation Testing** | Suíte corporativa de testes automatizados E2E para o portal do aluno. | Cypress, Cucumber (BDD), JavaScript, Allure Reports, Husky | Login via SSO, Injeção de variáveis de ambiente seguras, Relatórios visuais avançados, Execução paralela (POM + BDD) | [Acessar Projeto](file:///c:/Projetos/Trampo%20teste/cypress-bdd-automation-testing) |
+| **Cypress BDD Automation Testing** | Suíte corporativa de testes automatizados E2E para o portal do aluno. | Cypress, Cucumber (BDD), JavaScript, Allure Reports, Husky | Login via SSO, Fluxo de Certificados com Mocks, Injeção de variáveis de ambiente seguras, Relatórios visuais avançados, Execução paralela (POM + BDD) | [Acessar Projeto](file:///c:/Projetos/Trampo%20teste/cypress-bdd-automation-testing) |
 | **k6 Performance Testing** | Simulação de carga e estresse automatizados contra a API REST para validação de latência. | JavaScript (ES6), Grafana k6 | Ramping de usuários virtuais concorrentes, Definição de thresholds de SLA, Monitoramento de latência e taxa de erro | [Acessar Projeto](file:///c:/Projetos/Trampo%20teste/k6-performance-testing) |
 
 ---
@@ -162,12 +162,17 @@ c:/Projetos/Trampo teste/
 │   │   └── docs/bugs/            # Evidências e relatórios detalhados de bugs encontrados (Markdown)
 │   └── docker-compose.yml        # Orquestrador local da API + Web em containers
 │
-├── cypress-bdd-automation-testing/ # Automação Cypress para Área do Aluno
-│   ├── cypress/                  # Testes BDD (.feature), Definição de passos (Steps) e Page Objects
-│   │   ├── e2e/                  # Funcionalidades e fluxos simulados
-│   │   └── support/              # Comandos customizados Cypress e configurações
-│   ├── package.json              # Dependências e scripts de teste
-│   └── cypress.env.example.json  # Modelo para configuração das credenciais SSO
+├── cypress-bdd-automation-testing/ # Automação Cypress para Área do Aluno (SSO, BDD, POM)
+│   ├── cypress/
+│   │   ├── e2e/                  # Testes Funcionais estruturados com BDD/Cucumber
+│   │   │   ├── features/         # Cenários de especificação (.feature) em Gherkin
+│   │   │   └── step_definitions/ # Definições dos passos em JavaScript (Step Definitions)
+│   │   └── support/              # Arquivos de suporte e comandos personalizados
+│   │       ├── pages/            # Classes de representação de tela (Page Objects)
+│   │       ├── commands.js       # Comandos Cypress customizados (ex: login via SSO)
+│   │       └── e2e.js            # Inicializador e configurações globais de testes
+│   ├── package.json              # Dependências e scripts de automação
+│   └── cypress.env.example.json  # Modelo para configuração de variáveis de ambiente
 │
 ├── k6-performance-testing/       # Testes de carga e estresse com Grafana k6
 │   ├── load-test.js              # Script k6 de simulação de carga
@@ -223,7 +228,7 @@ Este repositório foi estruturado seguindo rigorosas práticas de segurança da 
 ## 🏛️ Governança de Qualidade
 
 Para uma visão detalhada da arquitetura de testes, pirâmide de testes e matriz de testes baseada em risco (RBT), consulte o nosso documento estratégico:
-*   [ESTRATEGY GLOBAL DE QA (TEST_STRATEGY.md)](file:///c:/Projetos/Trampo%20teste/finances-app-clean-arch/tests/docs/strategy/TEST_STRATEGY.md)
+*   [ESTRATÉGIA GLOBAL DE QA (TEST_STRATEGY.md)](file:///c:/Projetos/Trampo%20teste/finances-app-clean-arch/tests/docs/strategy/TEST_STRATEGY.md)
 
 ---
 
