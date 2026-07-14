@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using MinhasFinancas.Domain.Entities;
 
 namespace MinhasFinancas.Infrastructure.Data;
@@ -45,15 +45,14 @@ public class MinhasFinancasDbContext : DbContext
         modelBuilder.Entity<Pessoa>().HasIndex(p => p.Nome);
         modelBuilder.Entity<Categoria>().HasIndex(c => c.Descricao);
 
-        // Relacionamentos
         modelBuilder.Entity<Transacao>()
             .HasOne(t => t.Categoria)
-            .WithMany()
+            .WithMany(c => c.Transacoes)
             .HasForeignKey(t => t.CategoriaId);
 
         modelBuilder.Entity<Transacao>()
             .HasOne(t => t.Pessoa)
-            .WithMany()
+            .WithMany(p => p.Transacoes)
             .HasForeignKey(t => t.PessoaId);
 
         // Configurar propriedade Data da transação

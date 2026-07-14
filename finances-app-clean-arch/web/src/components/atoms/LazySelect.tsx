@@ -164,7 +164,7 @@ export function LazySelect<T>({ value, onChange, load, renderOption, getKey, pla
         <input
           id={id}
           aria-label={ariaLabel ?? placeholder}
-          aria-controls={dropdownId}
+          aria-controls={open ? dropdownId : undefined}
           className="w-full p-2 border rounded"
           placeholder={displayPlaceholder}
           value={search}

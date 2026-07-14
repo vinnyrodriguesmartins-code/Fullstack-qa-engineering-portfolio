@@ -1,6 +1,5 @@
 using System.Net;
 using System.Net.Http.Json;
-using Microsoft.Extensions.DependencyInjection;
 using MinhasFinancas.Application.DTOs;
 using MinhasFinancas.Domain.Entities;
 using MinhasFinancas.IntegrationTests.Infrastructure;
@@ -28,7 +27,11 @@ public class MenorDeIdadeReceitaTests : ApiTestBase
             Data = DateTime.Today
         });
 
-        Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var error = (await response.Content.ReadFromJsonAsync<ErrorResponseDto>())!;
+        Assert.NotNull(error);
+        Assert.Equal(400, error.StatusCode);
+        Assert.Contains("Menores de 18 anos não podem registrar receitas", error.Message);
     }
 
     [Fact]
@@ -48,5 +51,13 @@ public class MenorDeIdadeReceitaTests : ApiTestBase
         });
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        var result = (await response.Content.ReadFromJsonAsync<TransacaoDto>())!;
+        Assert.NotNull(result);
+        Assert.NotEqual(Guid.Empty, result.Id);
+        Assert.Equal("Cinema", result.Descricao);
+        Assert.Equal(40, result.Valor);
+        Assert.Equal(Transacao.ETipo.Despesa, result.Tipo);
+        Assert.Equal(menor.Id, result.PessoaId);
+        Assert.Equal(categoria.Id, result.CategoriaId);
     }
 }

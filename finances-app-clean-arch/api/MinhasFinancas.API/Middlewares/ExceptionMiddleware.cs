@@ -41,7 +41,11 @@ public class ExceptionMiddleware
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        
+        var isBusinessException = exception is InvalidOperationException;
+        context.Response.StatusCode = isBusinessException 
+            ? (int)HttpStatusCode.BadRequest 
+            : (int)HttpStatusCode.InternalServerError;
 
         // Oculta informações sensíveis em produção (OWASP A06:2021 / Information Disclosure)
         var detailedError = _env.IsDevelopment() 
@@ -51,7 +55,7 @@ public class ExceptionMiddleware
         var response = new
         {
             StatusCode = context.Response.StatusCode,
-            Message = "Ocorreu um erro interno no servidor.",
+            Message = isBusinessException ? exception.Message : "Ocorreu um erro interno no servidor.",
             Detailed = detailedError
         };
 

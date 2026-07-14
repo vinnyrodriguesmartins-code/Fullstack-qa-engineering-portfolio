@@ -45,7 +45,12 @@ public class ApiTestBase : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
         });
 
         response.EnsureSuccessStatusCode();
-        return (await response.Content.ReadFromJsonAsync<PessoaDto>())!;
+        var result = (await response.Content.ReadFromJsonAsync<PessoaDto>())!;
+        Assert.NotNull(result);
+        Assert.NotEqual(Guid.Empty, result.Id);
+        Assert.Equal(nome, result.Nome);
+        Assert.Equal(dataNascimento.Date, result.DataNascimento.Date);
+        return result;
     }
 
     protected async Task<CategoriaDto> CriarCategoriaAsync(string descricao, Categoria.EFinalidade finalidade)
@@ -57,7 +62,12 @@ public class ApiTestBase : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
         });
 
         response.EnsureSuccessStatusCode();
-        return (await response.Content.ReadFromJsonAsync<CategoriaDto>())!;
+        var result = (await response.Content.ReadFromJsonAsync<CategoriaDto>())!;
+        Assert.NotNull(result);
+        Assert.NotEqual(Guid.Empty, result.Id);
+        Assert.Equal(descricao, result.Descricao);
+        Assert.Equal(finalidade, result.Finalidade);
+        return result;
     }
 
     protected Task<HttpResponseMessage> CriarTransacaoAsync(CreateTransacaoDto dto) =>
@@ -92,4 +102,11 @@ public class ApiTestBase : IClassFixture<CustomWebApplicationFactory>, IAsyncLif
 
         return (T)Convert.ChangeType(result, typeof(T))!;
     }
+}
+
+public record ErrorResponseDto
+{
+    public int StatusCode { get; set; }
+    public string Message { get; set; } = string.Empty;
+    public string Detailed { get; set; } = string.Empty;
 }

@@ -14,6 +14,7 @@ export default defineConfig({
     baseURL: webBaseUrl,
     trace: "on-first-retry",
     screenshot: "only-on-failure",
+    colorScheme: "dark",
   },
   projects: [
     {

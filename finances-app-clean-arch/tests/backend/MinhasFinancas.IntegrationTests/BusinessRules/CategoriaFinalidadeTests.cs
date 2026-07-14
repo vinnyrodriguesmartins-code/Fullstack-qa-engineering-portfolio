@@ -1,4 +1,5 @@
 using System.Net;
+using System.Net.Http.Json;
 using MinhasFinancas.Application.DTOs;
 using MinhasFinancas.Domain.Entities;
 using MinhasFinancas.IntegrationTests.Infrastructure;
@@ -26,7 +27,11 @@ public class CategoriaFinalidadeTests : ApiTestBase
             Data = DateTime.Today
         });
 
-        Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var error = (await response.Content.ReadFromJsonAsync<ErrorResponseDto>())!;
+        Assert.NotNull(error);
+        Assert.Equal(400, error.StatusCode);
+        Assert.Contains("Não é possível registrar despesa em categoria de receita", error.Message);
     }
 
     [Fact]
@@ -45,7 +50,11 @@ public class CategoriaFinalidadeTests : ApiTestBase
             Data = DateTime.Today
         });
 
-        Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var error = (await response.Content.ReadFromJsonAsync<ErrorResponseDto>())!;
+        Assert.NotNull(error);
+        Assert.Equal(400, error.StatusCode);
+        Assert.Contains("Não é possível registrar receita em categoria de despesa", error.Message);
     }
 
     [Fact]
@@ -65,5 +74,13 @@ public class CategoriaFinalidadeTests : ApiTestBase
         });
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        var result = (await response.Content.ReadFromJsonAsync<TransacaoDto>())!;
+        Assert.NotNull(result);
+        Assert.NotEqual(Guid.Empty, result.Id);
+        Assert.Equal("Transferência", result.Descricao);
+        Assert.Equal(200, result.Valor);
+        Assert.Equal(Transacao.ETipo.Receita, result.Tipo);
+        Assert.Equal(adulto.Id, result.PessoaId);
+        Assert.Equal(categoria.Id, result.CategoriaId);
     }
 }

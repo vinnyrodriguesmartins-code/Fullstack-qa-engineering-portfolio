@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using MinhasFinancas.Domain.ValueObjects;
 using MinhasFinancas.Application.DTOs;
 using MinhasFinancas.Domain.Entities;
@@ -114,6 +114,10 @@ public class PessoaService : IPessoaService
     /// </summary>
     public async Task DeleteAsync(Guid id)
     {
+        var pessoa = await _unitOfWork.Pessoas.GetByIdAsync(id).ConfigureAwait(false);
+        if (pessoa == null)
+            throw new KeyNotFoundException("Pessoa não encontrada.");
+
         await _unitOfWork.Pessoas.DeleteAsync(id).ConfigureAwait(false);
         await _unitOfWork.SaveChangesAsync().ConfigureAwait(false);
     }

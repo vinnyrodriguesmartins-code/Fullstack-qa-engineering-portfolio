@@ -1,6 +1,13 @@
-# ✨ PORTFÓLIO DE PROJETOS — DEVS HUB ✨
+# 🧪 PORTFÓLIO DE GARANTIA DE QUALIDADE & AUTOMAÇÃO DE TESTES (QA / SDET) ✨
 
-Seja bem-vindo(a) ao meu portfólio de engenharia de software! Este repositório unifica projetos reais desenvolvidos com foco em **Arquitetura Limpa**, **Segurança**, **Qualidade de Software**, **Testes Automatizados (E2E & Unitários)**, **Testes de Performance** e **Práticas Modernas de DevSecOps/CI/CD**.
+Seja bem-vindo(a) ao meu portfólio de engenharia focado em **Quality Assurance (QA)** e **Automação de Testes (SDET)**! Este repositório reúne projetos práticos e cenários corporativos onde projetei e implementei estratégias de testes automatizados de ponta a ponta. Meu foco está em garantir a qualidade de software, confiabilidade, segurança e performance por meio de:
+
+*   ⚙️ **Testes de Unidade, Integração e Mutação**: Cobertura profunda de regras de negócio com xUnit, geração de dados realistas com Bogus e validação de cobertura/eficácia de testes com Stryker.NET.
+*   🚀 **Automação E2E & BDD**: Suítes de testes robustas utilizando Playwright com Page Object Model (POM) no ecossistema .NET/React, e Cypress estruturado com Cucumber (BDD) e Allure Reports.
+*   ♿ **Acessibilidade Automatizada (a11y) & Regressão Visual**: Varreduras de conformidade de acessibilidade (Axe-Core/WCAG 2.1 AA) e testes de snapshot de imagem para evitar quebras visuais de layout.
+*   ⚡ **Testes de Carga e Performance**: Simulação de carga, estresse e validação de limites de SLA em APIs utilizando Grafana k6 com ramping de usuários concorrentes.
+*   🔗 **Validação de Contrato de API**: Testes de integridade de esquema das respostas REST usando validação de esquemas (Zod).
+*   🛡️ **Práticas de DevSecOps & CI/CD**: Pipelines automatizados no Azure Pipelines e GitHub Actions, com publicação nativa de relatórios de testes (TRX/JUnit), análise de vulnerabilidades de dependências (`dotnet audit`) e mitigação de riscos OWASP Top 10.
 
 ---
 
@@ -24,7 +31,7 @@ Seja bem-vindo(a) ao meu portfólio de engenharia de software! Este repositório
 
 | Projeto | Descrição | Stack Principal | Destaques Técnicos | Link de Acesso |
 | :--- | :--- | :--- | :--- | :---: |
-| **Finances App (Clean Arch)** | Sistema completo para controle de despesas e receitas domésticas com foco em segurança OWASP. | .NET 9, React, Vite, Tailwind CSS, EF Core, SQLite | Clean Architecture, Injeção de Dependências, Testes unitários/integração (xUnit), Testes E2E (Playwright com POM), API Contract Testing (Schema Validation com Zod), Relatório de Bugs e Evidências | [Acessar Projeto](file:///c:/Projetos/Trampo%20teste/finances-app-clean-arch) |
+| **Finances App (Clean Arch)** | Sistema completo para controle de despesas e receitas domésticas com foco em segurança OWASP. | .NET 9, React, Vite, Tailwind CSS, EF Core, SQLite | Clean Architecture, Injeção de Dependências, Testes unitários/integração (xUnit & Bogus), Testes E2E (Playwright com POM), Acessibilidade Automatizada (Axe-Core a11y), Regressão Visual, Testes de Mutação (Stryker.NET), API Contract Testing (Schema Validation com Zod), Relatório de Bugs e Evidências | [Acessar Projeto](file:///c:/Projetos/Trampo%20teste/finances-app-clean-arch) |
 | **Cypress BDD Automation Testing** | Suíte corporativa de testes automatizados E2E para o portal do aluno. | Cypress, Cucumber (BDD), JavaScript, Allure Reports, Husky | Login via SSO, Injeção de variáveis de ambiente seguras, Relatórios visuais avançados, Execução paralela (POM + BDD) | [Acessar Projeto](file:///c:/Projetos/Trampo%20teste/cypress-bdd-automation-testing) |
 | **k6 Performance Testing** | Simulação de carga e estresse automatizados contra a API REST para validação de latência. | JavaScript (ES6), Grafana k6 | Ramping de usuários virtuais concorrentes, Definição de thresholds de SLA, Monitoramento de latência e taxa de erro | [Acessar Projeto](file:///c:/Projetos/Trampo%20teste/k6-performance-testing) |
 
@@ -195,9 +202,20 @@ Este repositório foi estruturado seguindo rigorosas práticas de segurança da 
 | **Executar Testes Cypress** | `cypress-bdd-automation-testing/` | `npm run test` | Abre o Cypress Test Runner interativo para execução dos cenários. |
 | **Executar Teste Carga k6** | `k6-performance-testing/` | `k6 run load-test.js` | Executa o teste completo de estresse e performance da API e valida SLAs. |
 | **Executar Teste Rápido k6** | `k6-performance-testing/` | `k6 run load-test.js --vus 1 --duration 1s` | Smoke test de validação rápida com 1 usuário e 1 iteração. |
-| **Restauração do Backend C#** | `finances-app-clean-arch/tests/backend/` | `dotnet restore MinhasFinancas.Tests.sln` | Restaura dependências NuGet do backend de testes. |
-| **Rodar Testes de Unidade C#** | `finances-app-clean-arch/tests/backend/` | `dotnet test MinhasFinancas.UnitTests/MinhasFinancas.UnitTests.csproj` | Roda os testes unitários do backend .NET. |
+| **Restauração do Backend C#** | `finances-app-clean-arch/tests/backend/` | `dotnet restore MinhasFinancas.Tests.sln` | Restaura dependências NuGet (incluindo Bogus). |
+| **Rodar Testes de Unidade C#** | `finances-app-clean-arch/tests/backend/` | `dotnet test MinhasFinancas.UnitTests/MinhasFinancas.UnitTests.csproj` | Roda os testes unitários do backend .NET (utilizando massa Bogus). |
+| **Testes de Acessibilidade (a11y)** | `finances-app-clean-arch/tests/frontend/` | `npx playwright test e2e/accessibility.spec.ts` | Executa varreduras de acessibilidade com Axe-Core e WCAG 2.1 AA. |
+| **Testes de Regressão Visual** | `finances-app-clean-arch/tests/frontend/` | `npx playwright test e2e/visual.spec.ts` | Executa teste de comparação de imagens do layout do app. |
+| **Criar/Atualizar Snapshots** | `finances-app-clean-arch/tests/frontend/` | `npx playwright test e2e/visual.spec.ts --update-snapshots` | Gera novas imagens bases de referência visual do layout. |
+| **Testes de Mutação (Stryker)** | `finances-app-clean-arch/tests/backend/MinhasFinancas.UnitTests/` | `dotnet stryker` | Executa o Stryker.NET para testes de mutação. |
 
 ---
 
-*Desenvolvido com excelência técnica para fins de portfólio de engenharia. Dúvidas ou sugestões, sinta-se à vontade para abrir uma issue!*
+## 🏛️ Governança de Qualidade
+
+Para uma visão detalhada da arquitetura de testes, pirâmide de testes e matriz de testes baseada em risco (RBT), consulte o nosso documento estratégico:
+*   [ESTRATEGY GLOBAL DE QA (TEST_STRATEGY.md)](file:///c:/Projetos/Trampo%20teste/finances-app-clean-arch/tests/docs/strategy/TEST_STRATEGY.md)
+
+---
+
+*Desenvolvido com excelência técnica para fins de portfólio de QA & Engenharia de Software. Dúvidas ou sugestões, sinta-se à vontade para abrir uma issue!*

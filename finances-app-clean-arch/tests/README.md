@@ -116,6 +116,78 @@ WEB_BASE_URL=http://localhost:5173 API_BASE_URL=http://localhost:5000/api/v1.0 n
 | Categoria conforme finalidade | ✓ | ✓ | ✓ | — |
 | Exclusão em cascata (pessoa) | — | ✓ | — | — |
 
+## 🔍 Governança de Validação de API (Status Codes & Payloads)
+
+Nossa suíte de testes de API (Integração C# e E2E Playwright) valida rigorosamente não apenas os códigos de status HTTP, mas também a integridade das payloads de envio (requests) e retorno (responses) das seguintes formas:
+
+### 1. Fluxo de Validação de Violação de Negócio (ex: 400 Bad Request)
+
+Quando uma regra de domínio é violada, a exceção é capturada globalmente, formatada e validada pelo teste:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Teste as Teste de API (C# ou JS)
+    participant API as API Gateway / Controller
+    participant Domain as Entidade de Domínio
+    participant Middleware as ExceptionMiddleware
+
+    Teste->>API: POST /api/v1.0/transacoes (Payload Inválida)
+    API->>Domain: Executa Setter / Valida Regra
+    Note over Domain: Lança InvalidOperationException<br/>(ex: "Menor não pode ter receita")
+    Domain-->>API: Propaga Exceção
+    API-->>Middleware: Intercepta Erro
+    Note over Middleware: Mapeia erro de negócio para<br/>HTTP 400 Bad Request
+    Middleware-->>Teste: Retorna 400 + ErrorResponseDto (JSON)
+    Note over Teste: Deserializa JSON e valida:<br/>1. StatusCode == 400<br/>2. Message contém texto esperado
+```
+
+### 2. Matriz de Cobertura de Status Codes & Payloads
+
+Abaixo está o mapeamento dos endpoints da aplicação e a respectiva validação em testes automatizados:
+
+| Controller | Ação / Rota | Método | Status Codes Validados | Validação de Request | Validação de Response | Suíte de Testes |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| **Pessoas** | `GET /pessoas` | `GET` | `200 OK` | — | Estrutura de Contrato (Zod) | Playwright E2E |
+| | `GET /pessoas/{id}` | `GET` | `404 NotFound` | — | Payload de erro | C# Integration |
+| | `POST /pessoas` | `POST` | `201 Created`, `400 BadRequest` | DataAnnotations (Nome vazio) | ID válido + Correspondência de Campos | C# Integration |
+| | `PUT /pessoas/{id}` | `PUT` | `404 NotFound` | DTO completo | Payload de erro | C# Integration |
+| | `DELETE /pessoas/{id}` | `DELETE` | `204 NoContent`, `404 NotFound` | — | — | C# Integration / Playwright |
+| **Categorias** | `GET /categorias/{id}` | `GET` | `404 NotFound` | — | Payload de erro | C# Integration |
+| | `POST /categorias` | `POST` | `201 Created`, `400 BadRequest` | DataAnnotations (Descrição vazia) | ID válido + Correspondência de Campos | C# Integration |
+| **Transações** | `GET /transacoes/{id}` | `GET` | `404 NotFound` | — | Payload de erro | C# Integration |
+| | `POST /transacoes` | `POST` | `201 Created`, `400 BadRequest` | DataAnnotations (Valor zero) | ID válido + Correspondência (Zod & C#) | C# Integration / Playwright |
+| **Totais** | `GET /totais/pessoas` | `GET` | `200 OK` | Filtros na query | Paginação e Estrutura `PagedResult<T>` | C# Integration / k6 |
+| | `GET /totais/categorias` | `GET` | `200 OK` | Filtros na query | Paginação e Estrutura `PagedResult<T>` | C# Integration / k6 |
+| **Rate Limit** | Global | `ANY` | `429 TooManyRequests` | Loop de 120 chamadas rápidas | Código HTTP 429 | C# Integration |
+
+### 3. Estruturas das Payloads de Resposta Validadas
+
+#### Contrato de Erro Comum (`ErrorResponseDto`)
+Mapeia respostas de exceções de negócios tratadas globalmente:
+```json
+{
+  "StatusCode": 400,
+  "Message": "Menores de 18 anos não podem registrar receitas.",
+  "Detailed": "Menores de 18 anos não podem registrar receitas."
+}
+```
+
+#### Contrato de Validação de Input (`ValidationProblemDetails`)
+Retornado pelo ASP.NET Core automaticamente em falhas de DataAnnotations (400 Bad Request):
+```json
+{
+  "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+  "title": "One or more validation errors occurred.",
+  "status": 400,
+  "errors": {
+    "Nome": [
+      "Nome é obrigatório."
+    ]
+  }
+}
+```
+
 ## Bugs documentados
 
 Detalhes em [`docs/bugs/`](docs/bugs/):
