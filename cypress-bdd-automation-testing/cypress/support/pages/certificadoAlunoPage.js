@@ -16,6 +16,7 @@ class certificadoAlunoPage {
 
   mockarCursoProgresso(nomeCurso, progressoPercentual) {
     // Intercepta a chamada de cursos do aluno para mockar o progresso
+    // Intercepts the student's courses call to mock progress
     cy.intercept('GET', '**/api/alunos/cursos*', (req) => {
       req.reply({
         statusCode: 200,
@@ -51,6 +52,7 @@ class certificadoAlunoPage {
 
   validarPdfBaixado(nomeArquivoContem) {
     // Mock de download de arquivo em Cypress
+    // File download mock in Cypress
     cy.intercept('GET', '**/downloads/certificado-*.pdf', {
       statusCode: 200,
       headers: {

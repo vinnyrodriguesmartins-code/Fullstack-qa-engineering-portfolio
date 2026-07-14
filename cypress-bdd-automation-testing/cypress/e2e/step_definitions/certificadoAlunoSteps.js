@@ -9,6 +9,7 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 
 Given('que o aluno está autenticado e na tela de certificados', () => {
   // Utiliza comando customizado ou simula bypass de login SSO
+  // Uses custom command or simulates SSO login bypass
   cy.LoginNovaLLL_Marcos();
   certificadoPage.acessarTelaCertificados();
 });
@@ -35,6 +36,7 @@ Given('que o aluno está cursando {string} com apenas {int}% de progresso', (nom
 
 When('o aluno tenta gerar o certificado para este curso', () => {
   // Reutiliza o método de clique, simulando a tentativa
+  // Reuses the click method, simulating the attempt
   certificadoPage.solicitarEmissao();
 });
 
@@ -65,11 +67,14 @@ Given('que o aluno seleciona para visualizar os detalhes do certificado do curso
 
 When('a tela de visualização do certificado é carregada', () => {
   // Já validado na visualização, apenas garante o log
+  // Already validated in the view, just ensures logging
   cy.log('Visualização do certificado carregada na tela');
 });
 
 Then('os campos de identificação devem exibir os dados corretos:', (dataTable) => {
-  const hashes = dataTable.hashes(); // Obtém os registros do DataTable
+  // Obtém os registros do DataTable
+  // Retrieves DataTable records
+  const hashes = dataTable.hashes();
   hashes.forEach((row) => {
     certificadoPage.validarInformacaoCertificado(row.Campo, row.ValorEsperado);
   });

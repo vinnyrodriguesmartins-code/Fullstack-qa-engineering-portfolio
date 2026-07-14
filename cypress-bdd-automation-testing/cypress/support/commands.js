@@ -7,6 +7,7 @@ import 'cypress-xpath';
 const variaveis = require('../fixtures/Configuracoes.js');
 
 // Comando customizado para realizar login via SSO na área do aluno
+// Custom command to perform login via SSO in the student portal
 Cypress.Commands.add('LoginNovaLLL_Marcos', () => {
   const emailareaaluno = variaveis.LoginNovaLLL_Marcos.email;
   const passwordareaaluno = variaveis.LoginNovaLLL_Marcos.password;
