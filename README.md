@@ -105,7 +105,41 @@ graph LR
     class Report output;
 ```
 
-### 3. Fluxo DevOps & Nuvem (CI/CD Azure DevOps + IaC)
+### 3. k6 Performance Testing (VUs & SLAs)
+
+A suíte de testes de performance simula cenários de carga concorrente contra as APIs, definindo critérios automáticos de sucesso baseados em tempos máximos de resposta (SLA) e taxas de erro:
+
+```mermaid
+graph TD
+    classDef default fill:#1f2937,stroke:#374151,stroke-width:1px,color:#f3f4f6;
+    classDef phases fill:#1e3a8a,stroke:#1d4ed8,stroke-width:2px,color:#dbeafe;
+    classDef target fill:#581c87,stroke:#7e22ce,stroke-width:2px,color:#f3e8ff;
+    classDef threshold fill:#065f46,stroke:#047857,stroke-width:2px,color:#ecfdf5;
+    classDef error fill:#991b1b,stroke:#dc2626,stroke-width:2px,color:#fee2e2;
+
+    subgraph "k6 Performance Testing Flow"
+        Start[k6 Run load-test.js] --> Phase1["Fase 1: Ramp-up (0 a 50 VUs em 30s)"]
+        Phase1 --> Phase2["Fase 2: Platô/Carga (50 VUs estáveis por 1m)"]
+        Phase2 --> Phase3["Fase 3: Ramp-down (50 a 0 VUs em 15s)"]
+        
+        Phase1 & Phase2 & Phase3 --> Hit["API REST (MinhasFinancas.API)"]
+        
+        Hit --> SLA{{"Validação de Thresholds (SLAs)"}}
+        
+        SLA -->|http_req_duration < 200ms| Pass["Sucesso: SLA Atendido (Retorno 0)"]
+        SLA -->|http_req_failed < 1%| Pass
+        
+        SLA -->|http_req_duration > 200ms| Fail["Falha: Quebra de SLA (Retorno 99)"]
+        SLA -->|http_req_failed > 1%| Fail
+    end
+
+    class Phase1,Phase2,Phase3 phases;
+    class Hit target;
+    class SLA,Pass threshold;
+    class Fail error;
+```
+
+### 4. Fluxo DevOps & Nuvem (CI/CD Azure DevOps + IaC)
 
 O ecossistema DevOps é orquestrado de forma moderna utilizando pipeline automatizado no Azure Pipelines com provisionamento via código (IaC) com arquivos Bicep:
 
@@ -187,7 +221,32 @@ c:/Projetos/Trampo teste/
 
 ## 🔒 Segurança e Privacidade de Dados (DevSecOps)
 
-Este repositório foi estruturado seguindo rigorosas práticas de segurança da informação e critérios da **OWASP Top 10** para blindar a aplicação contra ataques externos e evitar vazamento de credenciais:
+Este repositório foi estruturado seguindo rigorosas práticas de segurança da informação e critérios da **OWASP Top 10** para blindar a aplicação contra ataques externos e evitar vazamento de credenciais.
+
+```mermaid
+graph TD
+    classDef default fill:#1f2937,stroke:#374151,stroke-width:1px,color:#f3f4f6;
+    classDef user fill:#1e3a8a,stroke:#1d4ed8,stroke-width:2px,color:#dbeafe;
+    classDef guard fill:#065f46,stroke:#047857,stroke-width:2px,color:#ecfdf5;
+    classDef core fill:#78350f,stroke:#b45309,stroke-width:2px,color:#fef3c7;
+    classDef audit fill:#581c87,stroke:#7e22ce,stroke-width:2px,color:#f3e8ff;
+
+    subgraph "Arquitetura de Segurança & Proteção (DevSecOps / OWASP)"
+        Client[Requisição Externa / Atacante] --> Limit["Rate Limiting Middleware (100 req/min)"]
+        Limit --> Headers["Security Headers Middleware (CSP, XSS, Frame Options)"]
+        Headers --> Exception["Exception Handling Middleware (Sanitiza logs e stack trace)"]
+        Exception --> Business["Regras de Negócio (ex: Menor de idade não registra receita)"]
+        
+        Pipeline[Build CI - GitHub Actions / Azure Pipelines] --> Audit["dotnet audit (Varredura de dependências NuGet)"]
+    end
+
+    class Client user;
+    class Limit,Headers,Exception guard;
+    class Business core;
+    class Audit audit;
+```
+
+A tabela abaixo descreve as estratégias específicas aplicadas para cada recurso sensível ou vulnerabilidade mapeada:
 
 | Recurso Sensível / Mecanismo | Localização Original | Status | Estratégia de Segurança / Proteção |
 | :--- | :--- | :--- | :--- |
