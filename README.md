@@ -13,16 +13,25 @@ Seja bem-vindo(a) ao meu portfólio de engenharia focado em **Quality Assurance 
 
 ## 🚀 Tecnologias em Destaque
 
+### 🧪 Test Automation & Quality Assurance (QA / SDET)
+![Cypress](https://img.shields.io/badge/Cypress-17202C?style=for-the-badge&logo=cypress&logoColor=white)
+![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
+![k6](https://img.shields.io/badge/k6-7F6BE3?style=for-the-badge&logo=k6&logoColor=white)
+![Cucumber BDD](https://img.shields.io/badge/Cucumber_BDD-23D96C?style=for-the-badge&logo=cucumber&logoColor=white)
+![Allure Reports](https://img.shields.io/badge/Allure_Reports-D36A15?style=for-the-badge)
+![Axe-Core a11y](https://img.shields.io/badge/Axe--Core_(a11y)-1E293B?style=for-the-badge)
+![Stryker.NET](https://img.shields.io/badge/Stryker.NET-FF5733?style=for-the-badge)
+![xUnit](https://img.shields.io/badge/xUnit-512BD4?style=for-the-badge)
+![Zod Schema](https://img.shields.io/badge/Zod_Schema-3068B7?style=for-the-badge&logo=zod&logoColor=white)
+
+### 💻 Aplicações & Infraestrutura
 ![.NET 9](https://img.shields.io/badge/.NET%209-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
 ![React 19](https://img.shields.io/badge/React%2019-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
-![Cypress](https://img.shields.io/badge/Cypress-17202C?style=for-the-badge&logo=cypress&logoColor=white)
-![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
-![k6](https://img.shields.io/badge/k6-7F6BE3?style=for-the-badge&logo=k6&logoColor=white)
-![Azure](https://img.shields.io/badge/Azure-0078D4?style=for-the-badge&logo=microsoft-azure&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Azure Pipelines](https://img.shields.io/badge/Azure_Pipelines-0078D4?style=for-the-badge&logo=microsoft-azure&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
 
 ---
