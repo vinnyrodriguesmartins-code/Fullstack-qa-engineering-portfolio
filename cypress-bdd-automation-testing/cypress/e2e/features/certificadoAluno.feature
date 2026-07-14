@@ -26,7 +26,7 @@ Funcionalidade: Emissão e Download de Certificados
     Quando o aluno solicita a emissão do certificado
     Então o sistema deve exibir uma notificação de erro informando "Serviço temporariamente indisponível. Tente novamente mais tarde"
 
-  Cenário Esquema: Validar informações obrigatórias exibidas no certificado
+  Esquema do Cenário: Validar informações obrigatórias exibidas no certificado
     Dado que o aluno seleciona para visualizar os detalhes do certificado do curso "<curso>"
     Quando a tela de visualização do certificado é carregada
     Então os campos de identificação devem exibir os dados corretos:

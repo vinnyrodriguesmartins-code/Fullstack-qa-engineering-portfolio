@@ -7,7 +7,7 @@ Funcionalidade: Meus Cursos - Drawer
     Quando clica em “Ver todos” na seção de cursos
     Então o drawer lateral deve ser exibido com a lista completa de cursos
 
-  Cenário: Caso 2 - Aplicar filtro "<nomeFiltro>" na lista de cursos do drawer
+  Esquema do Cenário: Caso 2 - Aplicar filtro "<nomeFiltro>" na lista de cursos do drawer
     Dado que o drawer com a lista de cursos está aberto
     Quando o usuário clica no filtro "<nomeFiltro>"
     Então a lista deve exibir apenas os cursos que correspondem ao filtro "<nomeFiltro>" selecionado
@@ -21,7 +21,7 @@ Funcionalidade: Meus Cursos - Drawer
       | Não iniciado  |
       | Concluídos    |
 
-  Cenário: Caso 3 - Buscar cursos por "<texto>" no drawer
+  Esquema do Cenário: Caso 3 - Buscar cursos por "<texto>" no drawer
     Dado que o drawer com a lista de cursos está aberto
     Quando o usuário clica na lupa e digita "<texto>" relacionado ao nome, modalidade ou tag de um curso
     Então a lista deve ser atualizada com os cursos correspondentes

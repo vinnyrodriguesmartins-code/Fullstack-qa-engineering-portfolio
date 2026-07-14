@@ -7,7 +7,7 @@ Funcionalidade: Feedback Trial
     Quando o usuário clica no botão "Trial"
     Então deve ser exibido o formulário de avaliação
 
-  Cenário: Caso 2 - Avaliar "<nota>" e comentário
+  Esquema do Cenário: Caso 2 - Avaliar "<nota>" e comentário
     Dado que o usuário acessa a avaliação de trial
     Quando o usuário seleciona a "<nota>", "<intencaoCompra>" e adiciona seu comentário
     Então o sistema deve exibir "<Mensagem>" de sucesso
